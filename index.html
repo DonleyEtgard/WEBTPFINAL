@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscaminas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+      <header>
+        
+      </header>
+    <h1>🔥Buscaminas🔥</h1>
+    <div class="controls">
+        <button id="nuevo">Nuevo Juego</button>
+        <select id="dificultad">
+            <option value="facil">Fácil (8x8, 10 minas)</option>
+            <option value="medio">Medio (12x12, 20 minas)</option>
+            <option value="dificil">Difícil (16x16, 40 minas)</option>
+        </select>
+        <button id="btnAyuda">Ayuda</button>
+    </div>
+    <div id="info">
+        <span id="nivel">Nivel: 1</span> |
+        <span id="tiempo">Tiempo: 0s</span>
+    </div>
+    <div id="mensaje"></div>
+    <div id="tablero"></div>
+    <div id="ayudaModal" class="modal">
+        <div class="modal-content">
+            <span class="cerrar">&times;</span>
+            <h2>Ayuda</h2>
+            <pre id="textoAyuda"></pre>
+        </div>
+    </div>
+        <h2><strong>Buscaminas - ¡juega ahora!</strong></h2>
+        <p>Juego Opción	Ayuda</p>
+        <P>Menu: Página principal - Reglas - Buscaminas como deporte - Sobre la pagina
+           Buscaminas - ¡juega ahora!
+           Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989.
+           El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad
+           a las versiones que vienen con Microsoft Windows desde su versión 3.1.
+           El juego posee un sistema de récords para cada uno de Los 4 niveles 
+           en el que se indica el menor tiempo en terminar el juego. Los niveles son (para las nuevas versiones)</p>
+
+          <p>1. Nivel principiante: 8 × 8 casillas y 10 minas.</p>
+          <p>2. Nivel intermedio: 12 × 12 casillas y 20 minas.</p>
+          <p>3. Nivel experto: 16 × 16 casillas y 40 minas.   </p>
+          <p>Marca las minas con el botón derecho del ratón.  </p>
+          <p>El objetivo es descubrir todas las celdas sin minas.</p>
+
+    <script src="script.js"></script>
+</body>
+</htm
