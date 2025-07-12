@@ -1,27 +1,58 @@
-var filas, columnas, minas, tablero, perdido = false, minasColocadas = 0;
-var nivel = 1, tiempo = 0, intervaloTiempo, timeoutInactividad;
-
+// Variables globales
 var tableroDiv = document.getElementById('tablero');
 var mensaje = document.getElementById('mensaje');
 var nivelText = document.getElementById('nivel');
 var tiempoText = document.getElementById('tiempo');
+var jugadorNombreText = document.getElementById('jugadorNombre');
 
+var formJugador = document.getElementById('formJugador');
+var nombreJugadorInput = document.getElementById('nombreJugador');
+var respuestaServidor = document.getElementById('respuestaServidor');
+
+var filas, columnas, minas, nivel;
+var tablero = [];
+var perdido = false;
+var tiempo = 0;
+var intervaloTiempo;
+var timeoutInactividad;
+var jugadorNombre = '---';
+
+
+formJugador.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var nombre = nombreJugadorInput.value.trim();
+    if (nombre.length > 0) {
+        localStorage.setItem('jugadorNombre', nombre);
+        jugadorNombre = nombre;
+        jugadorNombreText.textContent = "Jugador: " + jugadorNombre;
+        respuestaServidor.textContent = "Nombre guardado correctamente.";
+        nombreJugadorInput.value = "";
+    } else {
+        alert("Por favor ingresa un nombre válido.");
+    }
+});
+
+// Evento botones
 document.getElementById('nuevo').addEventListener('click', iniciarJuego);
-document.getElementById('btnAyuda').addEventListener('click', mostrarAyuda);
+document.getElementById('btnAyuda').addEventListener('click', function () {
+    document.getElementById('ayudaModal').style.display = 'block';
+});
 document.querySelector('.cerrar').addEventListener('click', function () {
     document.getElementById('ayudaModal').style.display = 'none';
 });
 
+
 function iniciarJuego() {
-    /*Obtener dificultad*/
     var dificultad = document.getElementById('dificultad').value;
+    localStorage.setItem('nivelSeleccionado', dificultad);
+
     switch (dificultad) {
-        case 'facil': filas = columnas = 8; minas = 10; break;
-        case 'medio': filas = columnas = 12; minas = 20; break;
-        case 'dificil': filas = columnas = 16; minas = 40; break;
+        case 'facil': filas = columnas = 8; minas = 10; nivel = 1; break;
+        case 'medio': filas = columnas = 12; minas = 20; nivel = 2; break;
+        case 'dificil': filas = columnas = 16; minas = 40; nivel = 3; break;
+        default: filas = columnas = 8; minas = 10; nivel = 1; break;
     }
 
-    /*Reset*/
     tablero = [];
     perdido = false;
     mensaje.textContent = '';
@@ -32,10 +63,10 @@ function iniciarJuego() {
     clearInterval(intervaloTiempo);
     clearTimeout(timeoutInactividad);
 
-    /* Crear tablero */
     tableroDiv.innerHTML = '';
-    tableroDiv.style.gridTemplateColumns = 'repeat(' + columnas + ', 30px)';
+    tableroDiv.style.gridTemplateColumns = 'repeat(' + columnas + ', 35px)';
 
+    
     for (var i = 0; i < filas; i++) {
         tablero[i] = [];
         for (var j = 0; j < columnas; j++) {
@@ -54,8 +85,9 @@ function iniciarJuego() {
     iniciarInactividad();
 }
 
+// Colocar minas aleatoriamente
 function colocarMinas() {
-    minasColocadas = 0;
+    let minasColocadas = 0;
     while (minasColocadas < minas) {
         var fila = Math.floor(Math.random() * filas);
         var col = Math.floor(Math.random() * columnas);
@@ -67,22 +99,30 @@ function colocarMinas() {
     }
 }
 
+
 function actualizarNumeros(f, c) {
     for (var i = f - 1; i <= f + 1; i++) {
         for (var j = c - 1; j <= c + 1; j++) {
-            if (i >= 0 && i < filas && j >= 0 && j < columnas && !(i === f && j === c)) {
+            if (
+                i >= 0 && i < filas &&
+                j >= 0 && j < columnas &&
+                !(i === f && j === c)
+            ) {
                 tablero[i][j].numero++;
             }
         }
     }
 }
 
+
 function revelarCelda(e) {
+    if (perdido) return;
+
     var fila = parseInt(this.dataset.fila);
     var col = parseInt(this.dataset.col);
     var celda = tablero[fila][col];
 
-    if (perdido || celda.revelado) return;
+    if (celda.revelado) return;
 
     reiniciarInactividad();
     celda.revelado = true;
@@ -92,17 +132,44 @@ function revelarCelda(e) {
         celda.element.classList.add('mina');
         celda.element.textContent = '💣';
         terminarJuego('💣 Perdiste. Tocaste una mina.');
-    } else if (celda.numero > 0) {
+        return;
+    }
+
+    if (celda.numero > 0) {
         celda.element.textContent = celda.numero;
+        celda.element.dataset.numero = celda.numero;
     } else {
+        // Revelar recursivamente vecinos sin minas
         for (var i = fila - 1; i <= fila + 1; i++) {
             for (var j = col - 1; j <= col + 1; j++) {
-                if (i >= 0 && i < filas && j >= 0 && j < columnas) {
-                    revelarCelda.call(tablero[i][j].element);
+                if (
+                    i >= 0 && i < filas &&
+                    j >= 0 && j < columnas &&
+                    !(i === fila && j === col)
+                ) {
+                    var vecino = tablero[i][j];
+                    if (!vecino.revelado) {
+                        revelarCelda.call(vecino.element);
+                    }
                 }
             }
         }
     }
+
+    if (checkVictoria()) {
+        terminarJuego('🎉 ¡Ganaste! Felicitaciones.');
+    }
+}
+
+
+function checkVictoria() {
+    for (var i = 0; i < filas; i++) {
+        for (var j = 0; j < columnas; j++) {
+            var celda = tablero[i][j];
+            if (!celda.mina && !celda.revelado) return false;
+        }
+    }
+    return true;
 }
 
 function terminarJuego(msg) {
@@ -111,7 +178,6 @@ function terminarJuego(msg) {
     clearTimeout(timeoutInactividad);
     mensaje.textContent = msg;
 
-    // Mostrar todas las minas
     for (var i = 0; i < filas; i++) {
         for (var j = 0; j < columnas; j++) {
             var celda = tablero[i][j];
@@ -130,12 +196,13 @@ function iniciarTemporizador() {
     }, 1000);
 }
 
+
 function iniciarInactividad() {
     timeoutInactividad = setTimeout(function () {
         if (!perdido) {
-            terminarJuego('😴Perdiste por inactividad (5s sin jugar).');
+            terminarJuego('😴 Perdiste por inactividad (40s sin jugar).');
         }
-    }, 5000);
+    }, 40000);
 }
 
 function reiniciarInactividad() {
@@ -143,14 +210,17 @@ function reiniciarInactividad() {
     iniciarInactividad();
 }
 
-function mostrarAyuda() {
-    fetch('ayuda.txt')
-        .then(function (res) { return res.text(); })
-        .then(function (texto) {
-            document.getElementById('textoAyuda').textContent = texto;
-            document.getElementById('ayudaModal').style.display = 'block';
-        });
-}
+window.onload = function () {
+    var nombreGuardado = localStorage.getItem('jugadorNombre');
+    if (nombreGuardado) {
+        jugadorNombre = nombreGuardado;
+        jugadorNombreText.textContent = "Jugador: " + jugadorNombre;
+    }
 
-// Iniciar automáticamente al cargar
-iniciarJuego();
+    var dificultadGuardada = localStorage.getItem('nivelSeleccionado');
+    if (dificultadGuardada) {
+        document.getElementById('dificultad').value = dificultadGuardada;
+    }
+
+    iniciarJuego();
+};

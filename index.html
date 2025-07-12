@@ -1,53 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Buscaminas</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buscaminas - ¡Juega ahora!</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
-      <header>
-        
-      </header>
-    <h1>🔥Buscaminas🔥</h1>
-    <div class="controls">
-        <button id="nuevo">Nuevo Juego</button>
-        <select id="dificultad">
-            <option value="facil">Fácil (8x8, 10 minas)</option>
-            <option value="medio">Medio (12x12, 20 minas)</option>
-            <option value="dificil">Difícil (16x16, 40 minas)</option>
-        </select>
-        <button id="btnAyuda">Ayuda</button>
-    </div>
+
+  <h1>🔥 Buscaminas 🔥</h1>
+  <p>¡Evita las minas 💣 y revela todas las celdas 🔲!</p>
+
+  <div class="menu">
+    <button id="nuevo">Nuevo Juego</button>
+    <select id="dificultad">
+      <option value="facil">Fácil (8x8, 10 minas)</option>
+      <option value="medio">Medio (12x12, 20 minas)</option>
+      <option value="dificil">Difícil (16x16, 40 minas)</option>
+    </select>
+    <button id="btnAyuda">Ayuda</button>
+  </div>
+
+  <form id="formJugador" class="form-jugador">
+    <label for="nombreJugador">Jugador:</label>
+    <input type="text" id="nombreJugador" placeholder="Tu nombre" required />
+    <button type="submit">Guardar</button>
+    <p id="respuestaServidor"></p>
+  </form>
+
+  <div id="juegoContainer">
     <div id="info">
-        <span id="nivel">Nivel: 1</span> |
-        <span id="tiempo">Tiempo: 0s</span>
+      <span id="jugadorNombre">Jugador: --</span> |
+      <span id="nivel">Nivel: 1</span> |
+      <span id="tiempo" class="rojo">Tiempo: 0s</span>
     </div>
+
     <div id="mensaje"></div>
-    <div id="tablero"></div>
-    <div id="ayudaModal" class="modal">
-        <div class="modal-content">
-            <span class="cerrar">&times;</span>
-            <h2>Ayuda</h2>
-            <pre id="textoAyuda"></pre>
-        </div>
+    <div id="tablero" class="tablero"></div>
+  </div>
+
+  <div id="ayudaModal" class="modal">
+    <div class="modal-content">
+      <span class="cerrar">&times;</span>
+      <h2>Ayuda</h2>
+      <p>Revela celdas con clic izquierdo. Marca minas con clic derecho (si está implementado). ¡Evita las 💣!</p>
     </div>
-        <h2><strong>Buscaminas - ¡juega ahora!</strong></h2>
-        <p>Juego Opción	Ayuda</p>
-        <P>Menu: Página principal - Reglas - Buscaminas como deporte - Sobre la pagina
-           Buscaminas - ¡juega ahora!
-           Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989.
-           El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad
-           a las versiones que vienen con Microsoft Windows desde su versión 3.1.
-           El juego posee un sistema de récords para cada uno de Los 4 niveles 
-           en el que se indica el menor tiempo en terminar el juego. Los niveles son (para las nuevas versiones)</p>
+  </div>
 
-          <p>1. Nivel principiante: 8 × 8 casillas y 10 minas.</p>
-          <p>2. Nivel intermedio: 12 × 12 casillas y 20 minas.</p>
-          <p>3. Nivel experto: 16 × 16 casillas y 40 minas.   </p>
-          <p>Marca las minas con el botón derecho del ratón.  </p>
-          <p>El objetivo es descubrir todas las celdas sin minas.</p>
+  <h1>Buscaminas - ¡Juega ahora!</h1>
+  <p>Menu: Página principal - Reglas - Buscaminas como deporte - Sobre la página</p>
 
-    <script src="script.js"></script>
+  <p>
+    Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
+    El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad 
+    a las versiones que vienen con Microsoft Windows desde su versión 3.1.
+    <br><br>
+    El juego posee un sistema de récords para cada uno de los 4 niveles, en el que se indica el menor tiempo en terminar el juego:
+  </p>
+
+  
+    <li><strong>Nivel principiante:</strong> 8×8 casillas y 10 minas</li>
+    <li><strong>Nivel intermedio:</strong> 16×16 casillas y 40 minas</li>
+    <li><strong>Nivel experto:</strong> 16×30 casillas y 99 minas</li>
+    <li><strong>Nivel personalizado:</strong> usuario elige tamaño y cantidad de minas</li>
+ 
+
+  <script src="script.js"></script>
 </body>
-</htm
+</html>

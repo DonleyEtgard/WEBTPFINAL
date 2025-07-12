@@ -1,70 +1,203 @@
 body {
-    font-family: Arial, sans-serif;
+    background-color: #3e2f1c;
+    font-family: 'Roboto Mono', monospace;
+    color: #eee;
     text-align: center;
-    background-color: #706c6c;
-    margin: 0;
-    padding: 20px;
+    margin: 20px;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+    background-image: none; /* Removido el fondo de Minecraft para enfoque café */
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+.menu {
+    margin-bottom: 15px;
+}
+
+button, select, input {
+    padding: 8px 12px;
+    margin: 5px;
+    background-color: #5a3d2b;
+    color: #fff5e6;
+    border: 1px solid #8c6849;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+}
+
+button:hover, select:hover, input:hover {
+    background-color: #6f4f35;
+}
+
+#juegoContainer {
+    display: inline-block;
+    padding: 15px;
+    background-color: #4a3320;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(93, 62, 28, 0.7);
+    margin: 20px auto;
+    text-align: center;
+    min-width: max-content;
+    border: 2px solid #5d3e1c;
+}
+
+#info {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #6b4a2d;
+    padding: 10px 16px;
+    border-radius: 12px;
+    color: #f3e1c3;
+    border: 1px solid #a3784c;
+    box-shadow: 0 0 8px rgba(255, 210, 150, 0.2);
+}
+
+#info .rojo {
+    color: #ffb347;
+    font-weight: 900;
+}
+
+#mensaje {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #ff5555;
+    font-weight: bold;
+    min-height: 24px;
 }
 
 #tablero {
     display: grid;
-    margin: 20px auto;
-    gap: 2px;
-    width: fit-content;
+    justify-content: center;
+    gap: 3px;
+    padding: 10px;
+    background-color: #5d3e1c;
+    border: 2px solid #8c6849;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(93, 62, 28, 0.7);
 }
 
 .celda {
-    width: 30px;
-    height: 30px;
-    background-color: #cfc1c1;
-    border: 1px solid #999;
+    width: 35px;
+    height: 35px;
+    background-color: #8c6849;
+    border: 1px solid #5d3e1c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
     font-size: 18px;
+    color: #222;
     cursor: pointer;
-}
-
-.revelada {
-    background-color: #eee;
-    cursor: default;
-}
-
-.mina {
-    background-color: red;
-    color: white;
-}
-
-.controls {
-    margin-bottom: 10px;
-}
-
-#mensaje {
-    font-weight: bold;
-    margin-top: 10px;
-    color: red;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 20px;
-    width: 80%;
-    max-width: 400px;
-    position: relative;
+    transition: background-color 0.2s, transform 0.1s;
+    user-select: none;
     border-radius: 8px;
 }
 
+.celda:hover {
+    background-color: #a47858;
+    transform: scale(1.05);
+}
+
+.celda.revelada {
+    background-color: #e7cba9;
+    color: #222;
+    cursor: default;
+    box-shadow: inset 0 0 4px #a3784c;
+}
+
+/* Colores por número */
+.celda.revelada[data-numero='1'] { color: #00aaff; }
+.celda.revelada[data-numero='2'] { color: #00cc66; }
+.celda.revelada[data-numero='3'] { color: #ff4444; }
+.celda.revelada[data-numero='4'] { color: #ff8800; }
+.celda.revelada[data-numero='5'] { color: #aa66cc; }
+.celda.revelada[data-numero='6'] { color: #00dddd; }
+.celda.revelada[data-numero='7'] { color: #555555; }
+.celda.revelada[data-numero='8'] { color: #888800; }
+
+.celda.mina {
+    background-color: #ff6f3c;
+    color: white;
+    font-size: 22px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: #e3c2a4;
+    margin: auto;
+    padding: 20px;
+    width: 60%;
+    border-radius: 8px;
+    color: #222;
+    border: 1px solid #a3784c;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
 .cerrar {
-    position: absolute;
-    top: 10px;
-    right: 15px;
+    float: right;
     font-size: 24px;
     cursor: pointer;
 }
 
+.form-jugador {
+    margin-bottom: 15px;
+}
+
+.form-jugador input {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.form-jugador button {
+    width: 100px;
+}
+
+h1 {
+    display: flex;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #fbe5c4;
+    justify-content: center;
+}
+
+p {
+    display: flex;
+    font-size: 16px;
+    margin: 5px 0;
+    color: #eee1c5;
+    justify-content: center;
+}
+
+ul.li {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    color: #ddd;
+    justify-content: center;
+}
+
+.strong {
+    display: flex;
+    color: #f0f0f0;
+    font-weight: bold;
+    justify-content: center;
+}
