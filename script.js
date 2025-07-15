@@ -1,4 +1,6 @@
-// Variables globales
+
+
+/* Variables globales*/
 var tableroDiv = document.getElementById('tablero');
 var mensaje = document.getElementById('mensaje');
 var nivelText = document.getElementById('nivel');
@@ -32,7 +34,7 @@ formJugador.addEventListener('submit', function(e) {
     }
 });
 
-// Evento botones
+
 document.getElementById('nuevo').addEventListener('click', iniciarJuego);
 document.getElementById('btnAyuda').addEventListener('click', function () {
     document.getElementById('ayudaModal').style.display = 'block';
