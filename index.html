@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
-
   <h1>🔥 Buscaminas 🔥</h1>
   <p>¡Evita las minas 💣 y revela todas las celdas 🔲!</p>
 
@@ -16,10 +15,11 @@
     <button id="nuevo">Nuevo Juego</button>
     <select id="dificultad">
       <option value="facil">Fácil (8x8, 10 minas)</option>
-      <option value="medio">Medio (12x12, 20 minas)</option>
+      <option value="medio">Medio (12x12, 25 minas)</option>
       <option value="dificil">Difícil (16x16, 40 minas)</option>
     </select>
     <button id="btnAyuda">Ayuda</button>
+    <button id="btnEstadistica">Ranking</button>
   </div>
 
   <form id="formJugador" class="form-jugador">
@@ -29,7 +29,7 @@
     <p id="respuestaServidor"></p>
   </form>
 
-  <div id="juegoContainer">
+  <main id="juegoContainer">
     <div id="info">
       <span id="jugadorNombre">Jugador: --</span> |
       <span id="nivel">Nivel: 1</span> |
@@ -38,7 +38,7 @@
 
     <div id="mensaje"></div>
     <div id="tablero" class="tablero"></div>
-  </div>
+  </main>
 
   <div id="ayudaModal" class="modal">
     <div class="modal-content">
@@ -48,20 +48,31 @@
     </div>
   </div>
 
-  <h1>Buscaminas - ¡Juega ahora!</h1>
-  <p>Menu: Página principal - Reglas - Buscaminas como deporte - Sobre la página</p>
+  <div id="estadisticas">
+    <p id="fechaActual"></p>
+    <p id="jugadorRanking"></p>
+    <p id="puntajeJugador"></p>
+    <p id="duracionPartida"></p>
+  </div>
 
-  <p>
-    Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
-    El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad 
-    a las versiones que vienen con Microsoft Windows desde su versión 3.1.
-    El juego posee un sistema de récords para cada uno de los 4 niveles, en el que se indica el menor tiempo en terminar el juego:
-  </p>
+  <section>
+    <h2>Más sobre el Buscaminas</h2>
+    <p>Menú: Página principal - Reglas - Buscaminas como deporte - Sobre la página</p>
+    <p> Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
+      El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad 
+      a las versiones que vienen con Microsoft Windows desde su versión 3.1.</p>
 
-    <li><strong>Nivel principiante:</strong> 8×8 casillas y 10 minas</li>
-    <li><strong>Nivel intermedio:</strong> 16×16 casillas y 40 minas</li>
-    <li><strong>Nivel experto:</strong> 16×30 casillas y 99 minas</li>
-    <li><strong>Nivel personalizado:</strong> usuario elige tamaño y cantidad de minas</li>
+      <p>
+      El juego posee un sistema de récords para cada uno de los niveles, en el que se indica el menor tiempo en terminar el juego:
+    </p>
+
+    <ul>
+      <li><strong>Nivel principiante:</strong> 8×8 casillas y 10 minas</li>
+      <li><strong>Nivel medio:</strong> 12×12 casillas y 25 minas</li>
+      <li><strong>Nivel difícil:</strong> 16×16 casillas y 40 minas</li>
+      <li><strong>Nivel personalizado:</strong> El usuario elige tamaño y cantidad de minas</li>
+    </ul>
+  </section>
 
   <script src="script.js"></script>
 </body>
