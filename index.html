@@ -18,16 +18,26 @@
       <option value="medio">Medio (12x12, 25 minas)</option>
       <option value="dificil">Difícil (16x16, 40 minas)</option>
     </select>
+
+    <div id="estadisticas" style="display:none;">
+      <p id="fechaActual"></p>
+      <p id="jugadorRanking"></p>
+      <p id="puntajeJugador"></p>
+      <p id="duracionPartida"></p>
+    </div>
+
     <button id="btnAyuda">Ayuda</button>
     <button id="btnEstadistica">Ranking</button>
-  </div>
 
-  <form id="formJugador" class="form-jugador">
-    <label for="nombreJugador">Jugador:</label>
-    <input type="text" id="nombreJugador" placeholder="Tu nombre" required />
-    <button type="submit">Guardar</button>
-    <p id="respuestaServidor"></p>
-  </form>
+    <form id="formJugador" class="form-jugador">
+      <label for="nombreJugador">Jugador:</label>
+      <input type="text" id="nombreJugador" placeholder="Tu nombre" required />
+      <button type="submit">Guardar</button>
+      <p id="respuestaServidor"></p>
+    </form>
+
+    <button onclick="window.location.href='formularioJugador.html'">Contacto</button>
+  </div>
 
   <main id="juegoContainer">
     <div id="info">
@@ -40,31 +50,22 @@
     <div id="tablero" class="tablero"></div>
   </main>
 
-  <div id="ayudaModal" class="modal">
+  <div id="ayudaModal" class="modal" style="display:none;">
     <div class="modal-content">
-      <span class="cerrar">&times;</span>
+      <span class="cerrar" style="cursor:pointer;">&times;</span>
       <h2>Ayuda</h2>
       <p>Revela celdas con clic izquierdo. Marca minas con clic derecho (si está implementado). ¡Evita las 💣!</p>
     </div>
   </div>
 
-  <div id="estadisticas">
-    <p id="fechaActual"></p>
-    <p id="jugadorRanking"></p>
-    <p id="puntajeJugador"></p>
-    <p id="duracionPartida"></p>
-  </div>
-
   <section>
     <h2>Más sobre el Buscaminas</h2>
     <p>Menú: Página principal - Reglas - Buscaminas como deporte - Sobre la página</p>
-    <p> Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
+    <p>Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
       El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad 
       a las versiones que vienen con Microsoft Windows desde su versión 3.1.</p>
 
-      <p>
-      El juego posee un sistema de récords para cada uno de los niveles, en el que se indica el menor tiempo en terminar el juego:
-    </p>
+    <p>El juego posee un sistema de récords para cada uno de los niveles, en el que se indica el menor tiempo en terminar el juego:</p>
 
     <ul>
       <li><strong>Nivel principiante:</strong> 8×8 casillas y 10 minas</li>
