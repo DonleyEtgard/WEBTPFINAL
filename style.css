@@ -119,6 +119,14 @@ button:focus, select:focus, input:focus {
     box-shadow: inset 0 0 4px #a3784c;
 }
 
+ .bandera {
+  background-color: #ffe4e1;
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
 .celda.revelada[data-numero='1'] { color: #00aaff; }
 .celda.revelada[data-numero='2'] { color: #00cc66; }
 .celda.revelada[data-numero='3'] { color: #ff4444; }
@@ -192,6 +200,7 @@ button:focus, select:focus, input:focus {
 
 h1 {
     display: flex;
+    text-align: center;
     font-size: 24px;
     margin-bottom: 10px;
     color: #fbe5c4;
@@ -251,6 +260,7 @@ strong {
     background-color: #6f4f35;
 }
 #formularioJugador textarea {
+    position: sticky;
     width: 480px;
     height: 250px;
     padding: 10px;
@@ -259,6 +269,8 @@ strong {
     border-radius: 4px;
     resize: none;
 }
+
+
 @media screen and (max-width: 600px) {
     body {
         margin: 10px;
@@ -272,11 +284,60 @@ strong {
         height: 30px;
         font-size: 16px;
     }
-    #formularioJugador input, .formularioJugador textarea {
+    #formularioJugador input {
+        width: 80%;
+        
+    }
+    #formularioJugador textarea {
         width: 90%;
+        height: 200px;
     }
     #formularioJugador button {
-        width: 90%;
+        width: 25%;
     }
     
+}
+@media screen and (max-width: 400px) {
+    .celda {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+    }
+    #formularioJugador input {
+        width: 90%;
+    }
+    #formularioJugador textarea {
+        width: 95%;
+        height: 150px;
+    }
+    #formularioJugador button {
+        width: 30%;
+    }
+    .mobile-header {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .mobile-header img {
+        width: 30px;
+        height: 30px;
+    }
+    .mobile-header span {
+        font-size: 16px;
+    }
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .mobile-header img {
+        width: 40px;
+        height: 40px;
+    }
+    .mobile-header span {
+        font-size: 18px;
+    }
+    .mobile-header {
+        margin-bottom: 20px;
+    } 
 }

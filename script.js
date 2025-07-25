@@ -106,6 +106,13 @@ if (formJugador && tableroDiv) {
   }
 
   function iniciarJuego() {
+
+     var sonidoInicio = document.getElementById('clickSound');
+          if (sonidoInicio) {
+    sonidoInicio.currentTime = 0;
+    sonidoInicio.play().catch(() => {});
+      }
+
     var dificultad = document.getElementById('dificultad').value;
     localStorage.setItem('nivelSeleccionado', dificultad);
 
@@ -138,6 +145,12 @@ if (formJugador && tableroDiv) {
         celda.dataset.fila = i;
         celda.dataset.col = j;
         celda.addEventListener('click', revelarCelda);
+        celda.addEventListener('contextmenu', function (e) {
+          e.preventDefault();
+          if (this.classList.contains('revelada') || perdido) return;
+          this.classList.toggle('bandera');
+          this.textContent = this.classList.contains('bandera') ? '🚩' : '';
+        });
         tableroDiv.appendChild(celda);
         tablero[i][j] = { mina: false, revelado: false, numero: 0, element: celda };
       }
@@ -164,16 +177,25 @@ if (formJugador && tableroDiv) {
   function actualizarNumeros(f, c) {
     for (var i = f - 1; i <= f + 1; i++) {
       for (var j = c - 1; j <= c + 1; j++) {
-        if (
-          i >= 0 && i < filas &&
-          j >= 0 && j < columnas &&
-          !(i === f && j === c)
-        ) {
+        if (i >= 0 && i < filas && j >= 0 && j < columnas && !(i === f && j === c)) {
           tablero[i][j].numero++;
         }
       }
     }
   }
+
+celda.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+  if (this.classList.contains('revelada') || perdido) return;
+
+  if (this.textContent === '🚩') {
+    this.textContent = '';
+    this.classList.remove('bandera');
+  } else {
+    this.textContent = '🚩';
+    this.classList.add('bandera');
+  }
+});
 
   function revelarCelda() {
     if (perdido) return;
@@ -182,7 +204,7 @@ if (formJugador && tableroDiv) {
     var col = parseInt(this.dataset.col);
     var celda = tablero[fila][col];
 
-    if (celda.revelado) return;
+    if (celda.revelado || this.classList.contains('bandera')) return;
 
     reiniciarInactividad();
     celda.revelado = true;
@@ -201,11 +223,7 @@ if (formJugador && tableroDiv) {
     } else {
       for (var i = fila - 1; i <= fila + 1; i++) {
         for (var j = col - 1; j <= col + 1; j++) {
-          if (
-            i >= 0 && i < filas &&
-            j >= 0 && j < columnas &&
-            !(i === fila && j === col)
-          ) {
+          if (i >= 0 && i < filas && j >= 0 && j < columnas && !(i === fila && j === col)) {
             var vecino = tablero[i][j];
             if (!vecino.revelado) {
               revelarCelda.call(vecino.element);
@@ -235,6 +253,23 @@ if (formJugador && tableroDiv) {
     clearInterval(intervaloTiempo);
     clearTimeout(timeoutInactividad);
     mensaje.textContent = msg;
+
+   if (msg.includes("Perdiste")) {
+  var explosion = document.getElementById('explosionSound');
+  if (explosion) {
+    explosion.currentTime = 0;
+    explosion.play().catch(() => {});
+  }
+}
+
+if (msg.includes("Ganaste")) {
+  var victoria = document.getElementById('victorySound');
+  if (victoria) {
+    victoria.currentTime = 0;
+    victoria.play().catch(() => {});
+  }
+}
+
 
     for (var i = 0; i < filas; i++) {
       for (var j = 0; j < columnas; j++) {
@@ -282,7 +317,6 @@ if (formJugador && tableroDiv) {
       jugadorNombre = nombreGuardado;
       jugadorNombreText.textContent = 'Jugador: ' + jugadorNombre;
     }
-
     var dificultadGuardada = localStorage.getItem('nivelSeleccionado');
     if (dificultadGuardada) {
       document.getElementById('dificultad').value = dificultadGuardada;
@@ -290,33 +324,30 @@ if (formJugador && tableroDiv) {
     iniciarJuego();
   };
 
-}
+  var formContacto = document.getElementById('formularioJugador');
+  if (formContacto) {
+    var inputNombre = document.getElementById('nombre');
+    var inputEmail = document.getElementById('Email');
+    var inputMensaje = document.getElementById('mensaje');
+    var respuestaContacto = document.getElementById('respuestaServidor');
 
+    formContacto.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-var formContacto = document.getElementById('formularioJugador');
-if (formContacto) {
-  var inputNombre = document.getElementById('nombre');
-  var inputEmail = document.getElementById('Email');
-  var inputMensaje = document.getElementById('mensaje');
-  var respuestaContacto = document.getElementById('respuestaServidor');
+      var nombreVal = inputNombre.value.trim();
+      var emailVal = inputEmail.value.trim();
+      var mensajeVal = inputMensaje.value.trim();
 
-  formContacto.addEventListener('submit', function(e) {
-    e.preventDefault();
+      if (nombreVal === '' || emailVal === '' || mensajeVal === '') {
+        alert('Por favor completa todos los campos.');
+        return;
+      }
 
-    var nombreVal = inputNombre.value.trim();
-    var emailVal = inputEmail.value.trim();
-    var mensajeVal = inputMensaje.value.trim();
+      respuestaContacto.textContent = "Mensaje enviado correctamente. ¡Gracias, " + nombreVal + "!";
 
-    if (nombreVal === '' || emailVal === '' || mensajeVal === '') {
-      alert('Por favor completa todos los campos.');
-      return;
-    }
-
-    respuestaContacto.textContent = "Mensaje enviado correctamente. ¡Gracias, " + nombreVal + "!";
-    
-    // Limpiar formulario
-    inputNombre.value = '';
-    inputEmail.value = '';
-    inputMensaje.value = '';
-  });
-}
+      inputNombre.value = '';
+      inputEmail.value = '';
+      inputMensaje.value = '';
+    });
+  }
+} // Fin de condicional de existencia de formJugador y tableroDiv

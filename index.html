@@ -7,10 +7,12 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
 </head>
+
 <body>
   <h1>🔥 Buscaminas 🔥</h1>
   <p>¡Evita las minas 💣 y revela todas las celdas 🔲!</p>
 
+<section>
   <div class="menu">
     <button id="nuevo">Nuevo Juego</button>
     <select id="dificultad">
@@ -42,6 +44,7 @@
   <main id="juegoContainer">
     <div id="info">
       <span id="jugadorNombre">Jugador: --</span> |
+      <span >😂</span> |
       <span id="nivel">Nivel: 1</span> |
       <span id="tiempo" class="rojo">Tiempo: 0s</span>
     </div>
@@ -57,9 +60,11 @@
       <p>Revela celdas con clic izquierdo. Marca minas con clic derecho (si está implementado). ¡Evita las 💣!</p>
     </div>
   </div>
+  </section>
 
-  <section>
-    <h2>Más sobre el Buscaminas</h2>
+  <section id="informacion
+  ">
+             <h2>Más sobre el Buscaminas</h2>
     <p>Menú: Página principal - Reglas - Buscaminas como deporte - Sobre la página</p>
     <p>Buscaminas (en inglés: Minesweeper) es un videojuego para un jugador inventado en 1989. 
       El juego ha sido programado para muchos sistemas operativos, pero debe su popularidad 
@@ -73,8 +78,15 @@
       <li><strong>Nivel difícil:</strong> 16×16 casillas y 40 minas</li>
       <li><strong>Nivel personalizado:</strong> El usuario elige tamaño y cantidad de minas</li>
     </ul>
+  
   </section>
 
+  <!-- 🎮 Script -->
   <script src="script.js"></script>
+
+  <!-- 🔊 Sonidos agregados al final del body -->
+  <audio id="clickSound" src="start.mp3"></audio>
+<audio id="explosionSound" src="explosion.mp3"></audio>
+<audio id="victorySound" src="victory.mp3"></audio>
 </body>
 </html>
