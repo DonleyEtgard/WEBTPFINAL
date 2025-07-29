@@ -1,7 +1,4 @@
-// --- Variables comunes ---
 var jugadorNombre = '---';
-
-// --- Variables para juego (solo si existen en la página) ---
 var tableroDiv = document.getElementById('tablero');
 var mensaje = document.getElementById('mensaje');
 var nivelText = document.getElementById('nivel');
@@ -18,19 +15,37 @@ var fechaActual = document.getElementById('fechaActual');
 var jugadorRanking = document.getElementById('jugadorRanking');
 var puntajeJugador = document.getElementById('puntajeJugador');
 var duracionPartida = document.getElementById('duracionPartida');
+var pausaJuegoBtn = document.getElementById('btnPausajuego');
 
 var filas, columnas, minas, nivel;
 var tablero = [];
 var ranking = [];
 var perdido = false;
+var pausado = false;
 var tiempo = 0;
 var intervaloTiempo;
 var timeoutInactividad;
 
-// Solo si estamos en la página de juego
-if (formJugador && tableroDiv) {
+var bgMusic = document.getElementById('bgMusic');
+var clickSound = document.getElementById('clickSound');
 
-  formJugador.addEventListener('submit', function(e) {
+window.addEventListener('DOMContentLoaded', () => {
+  const activarMusica = () => {
+    if (bgMusic) {
+      bgMusic.muted = false;
+      bgMusic.play().catch(() => {});
+    }
+    document.removeEventListener('click', activarMusica);
+    document.removeEventListener('touchstart', activarMusica);
+  };
+
+  document.addEventListener('click', activarMusica);
+  document.addEventListener('touchstart', activarMusica);
+});
+
+if (formJugador && tableroDiv) {
+ 
+  formJugador.addEventListener('submit', function (e) {
     e.preventDefault();
     var nombre = nombreJugadorInput.value.trim();
     if (nombre.length > 0) {
@@ -60,8 +75,9 @@ if (formJugador && tableroDiv) {
     }
   });
 
+
   if (btnEstadistica) {
-    btnEstadistica.addEventListener('click', function() {
+    btnEstadistica.addEventListener('click', function () {
       var historial = JSON.parse(localStorage.getItem('historialPartidas')) || [];
 
       if (historial.length === 0) {
@@ -70,7 +86,6 @@ if (formJugador && tableroDiv) {
       }
 
       var ultimaPartida = historial[historial.length - 1];
-
       fechaActual.textContent = "Fecha: " + ultimaPartida.fecha;
       jugadorRanking.textContent = "Jugador: " + ultimaPartida.jugador;
       puntajeJugador.textContent = "Puntaje: " + ultimaPartida.puntaje;
@@ -80,21 +95,22 @@ if (formJugador && tableroDiv) {
     });
   }
 
+
   var btnAyuda = document.getElementById('btnAyuda');
   if (btnAyuda) {
-    btnAyuda.addEventListener('click', function() {
+    btnAyuda.addEventListener('click', function () {
       document.getElementById('ayudaModal').style.display = 'block';
     });
   }
 
   var btnCerrarAyuda = document.querySelector('.cerrar');
   if (btnCerrarAyuda) {
-    btnCerrarAyuda.addEventListener('click', function() {
+    btnCerrarAyuda.addEventListener('click', function () {
       document.getElementById('ayudaModal').style.display = 'none';
     });
   }
 
-  window.addEventListener('click', function(e) {
+  window.addEventListener('click', function (e) {
     if (e.target.id === 'ayudaModal') {
       document.getElementById('ayudaModal').style.display = 'none';
     }
@@ -105,13 +121,33 @@ if (formJugador && tableroDiv) {
     btnNuevo.addEventListener('click', iniciarJuego);
   }
 
-  function iniciarJuego() {
-
-     var sonidoInicio = document.getElementById('clickSound');
-          if (sonidoInicio) {
-    sonidoInicio.currentTime = 0;
-    sonidoInicio.play().catch(() => {});
+ 
+  if (pausaJuegoBtn) {
+    pausaJuegoBtn.addEventListener('click', function () {
+      if (!pausado) {
+       
+        pausado = true;
+        clearInterval(intervaloTiempo);
+        clearTimeout(timeoutInactividad);
+        mensaje.textContent = '⏸️ Juego en pausa';
+        pausaJuegoBtn.textContent = '▶️ Reanudar';
+      } else {
+      
+        pausado = false;
+        iniciarTemporizador();
+        reiniciarInactividad();
+        mensaje.textContent = '';
+        pausaJuegoBtn.textContent = '⏸️ Pausar';
       }
+    });
+  }
+
+ 
+  function iniciarJuego() {
+    if (clickSound) {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(() => {});
+    }
 
     var dificultad = document.getElementById('dificultad').value;
     localStorage.setItem('nivelSeleccionado', dificultad);
@@ -126,6 +162,7 @@ if (formJugador && tableroDiv) {
     tablero = [];
     ranking = [];
     perdido = false;
+    pausado = false;
     mensaje.textContent = '';
     nivelText.textContent = 'Nivel: ' + nivel;
     tiempo = 0;
@@ -147,7 +184,7 @@ if (formJugador && tableroDiv) {
         celda.addEventListener('click', revelarCelda);
         celda.addEventListener('contextmenu', function (e) {
           e.preventDefault();
-          if (this.classList.contains('revelada') || perdido) return;
+          if (this.classList.contains('revelada') || perdido || pausado) return;
           this.classList.toggle('bandera');
           this.textContent = this.classList.contains('bandera') ? '🚩' : '';
         });
@@ -159,6 +196,7 @@ if (formJugador && tableroDiv) {
     colocarMinas();
     iniciarTemporizador();
     iniciarInactividad();
+    pausaJuegoBtn.textContent = '⏸️ Pausar';
   }
 
   function colocarMinas() {
@@ -184,21 +222,8 @@ if (formJugador && tableroDiv) {
     }
   }
 
-celda.addEventListener('contextmenu', function (e) {
-  e.preventDefault();
-  if (this.classList.contains('revelada') || perdido) return;
-
-  if (this.textContent === '🚩') {
-    this.textContent = '';
-    this.classList.remove('bandera');
-  } else {
-    this.textContent = '🚩';
-    this.classList.add('bandera');
-  }
-});
-
   function revelarCelda() {
-    if (perdido) return;
+    if (perdido || pausado) return;
 
     var fila = parseInt(this.dataset.fila);
     var col = parseInt(this.dataset.col);
@@ -220,6 +245,7 @@ celda.addEventListener('contextmenu', function (e) {
     if (celda.numero > 0) {
       celda.element.textContent = celda.numero;
       celda.element.dataset.numero = celda.numero;
+      celda.element.classList.add('num-' + celda.numero);
     } else {
       for (var i = fila - 1; i <= fila + 1; i++) {
         for (var j = col - 1; j <= col + 1; j++) {
@@ -254,23 +280,6 @@ celda.addEventListener('contextmenu', function (e) {
     clearTimeout(timeoutInactividad);
     mensaje.textContent = msg;
 
-   if (msg.includes("Perdiste")) {
-  var explosion = document.getElementById('explosionSound');
-  if (explosion) {
-    explosion.currentTime = 0;
-    explosion.play().catch(() => {});
-  }
-}
-
-if (msg.includes("Ganaste")) {
-  var victoria = document.getElementById('victorySound');
-  if (victoria) {
-    victoria.currentTime = 0;
-    victoria.play().catch(() => {});
-  }
-}
-
-
     for (var i = 0; i < filas; i++) {
       for (var j = 0; j < columnas; j++) {
         var celda = tablero[i][j];
@@ -292,14 +301,14 @@ if (msg.includes("Ganaste")) {
   }
 
   function iniciarTemporizador() {
-    intervaloTiempo = setInterval(function() {
+    intervaloTiempo = setInterval(function () {
       tiempo++;
       tiempoText.textContent = "Tiempo: " + tiempo + "s";
     }, 1000);
   }
 
   function iniciarInactividad() {
-    timeoutInactividad = setTimeout(function() {
+    timeoutInactividad = setTimeout(function () {
       if (!perdido) {
         terminarJuego('😴 Perdiste por inactividad (40s sin jugar).');
       }
@@ -311,7 +320,7 @@ if (msg.includes("Ganaste")) {
     iniciarInactividad();
   }
 
-  window.onload = function() {
+  window.onload = function () {
     var nombreGuardado = localStorage.getItem('jugadorNombre');
     if (nombreGuardado) {
       jugadorNombre = nombreGuardado;
@@ -323,31 +332,4 @@ if (msg.includes("Ganaste")) {
     }
     iniciarJuego();
   };
-
-  var formContacto = document.getElementById('formularioJugador');
-  if (formContacto) {
-    var inputNombre = document.getElementById('nombre');
-    var inputEmail = document.getElementById('Email');
-    var inputMensaje = document.getElementById('mensaje');
-    var respuestaContacto = document.getElementById('respuestaServidor');
-
-    formContacto.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      var nombreVal = inputNombre.value.trim();
-      var emailVal = inputEmail.value.trim();
-      var mensajeVal = inputMensaje.value.trim();
-
-      if (nombreVal === '' || emailVal === '' || mensajeVal === '') {
-        alert('Por favor completa todos los campos.');
-        return;
-      }
-
-      respuestaContacto.textContent = "Mensaje enviado correctamente. ¡Gracias, " + nombreVal + "!";
-
-      inputNombre.value = '';
-      inputEmail.value = '';
-      inputMensaje.value = '';
-    });
-  }
-} // Fin de condicional de existencia de formJugador y tableroDiv
+}

@@ -9,6 +9,10 @@
 </head>
 
 <body>
+  <audio id="bgMusic" autoplay loop muted>
+   <source src="Asset/Buscaminas con musica epica xd.mp3" type="audio/mpeg">
+  </audio>
+
   <h1>🔥 Buscaminas 🔥</h1>
   <p>¡Evita las minas 💣 y revela todas las celdas 🔲!</p>
 
@@ -44,8 +48,8 @@
   <main id="juegoContainer">
     <div id="info">
       <span id="jugadorNombre">Jugador: --</span> |
-      <span >😂</span> |
       <span id="nivel">Nivel: 1</span> |
+      <button id="btnPausajuego">⏯️</button>|
       <span id="tiempo" class="rojo">Tiempo: 0s</span>
     </div>
 
@@ -83,10 +87,5 @@
 
   <!-- 🎮 Script -->
   <script src="script.js"></script>
-
-  <!-- 🔊 Sonidos agregados al final del body -->
-  <audio id="clickSound" src="start.mp3"></audio>
-<audio id="explosionSound" src="explosion.mp3"></audio>
-<audio id="victorySound" src="victory.mp3"></audio>
 </body>
 </html>

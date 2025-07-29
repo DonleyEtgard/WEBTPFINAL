@@ -218,6 +218,7 @@ p {
 ul {
     list-style-type: none;
     padding: 0;
+    flex-direction: column;
     margin: 0;
     color: #ddd;
     display: flex;
@@ -227,6 +228,7 @@ ul {
 
 strong {
     display: flex;
+    flex-direction: column;
     color: #f0f0f0;
     font-weight: bold;
     justify-content: center;
@@ -271,73 +273,69 @@ strong {
 }
 
 
-@media screen and (max-width: 600px) {
-    body {
-        margin: 10px;
+@media screen and (max-width: 786px) {
+    h1 {
+        font-size: 20px;
+    }
+    #info {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    button, select, input {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+    #mensaje {
+        font-size: 16px;
+    }
+    .celda {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+    #tablero {
+        gap: 2px;
+        padding: 8px;
     }
     #juegoContainer {
-        width: 100%;
         padding: 10px;
+        margin: 10px auto;
     }
-    .celda {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
+    .modal-content {
+        width: 85%;
     }
-    #formularioJugador input {
-        width: 80%;
-        
-    }
+    #formularioJugador input,
     #formularioJugador textarea {
         width: 90%;
-        height: 200px;
     }
     #formularioJugador button {
-        width: 25%;
+        width: 50%;
     }
-    
 }
-@media screen and (max-width: 400px) {
-    .celda {
-        width: 25px;
-        height: 25px;
-        font-size: 14px;
-    }
-    #formularioJugador input {
-        width: 90%;
-    }
-    #formularioJugador textarea {
-        width: 95%;
-        height: 150px;
-    }
-    #formularioJugador button {
-        width: 30%;
-    }
-    .mobile-header {
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
-    .mobile-header img {
-        width: 30px;
-        height: 30px;
-    }
-    .mobile-header span {
-        font-size: 16px;
-    }
-    .mobile-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-    .mobile-header img {
-        width: 40px;
-        height: 40px;
-    }
-    .mobile-header span {
+
+@media screen and (max-width: 480px) {
+    h1 {
         font-size: 18px;
     }
-    .mobile-header {
-        margin-bottom: 20px;
-    } 
+    #info {
+        font-size: 13px;
+    }
+    .celda {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+    #formularioJugador textarea {
+        height: 160px;
+    }
+    .modal-content {
+        padding: 10px;
+    }
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    strong, p {
+        font-size: 14px;
+    }
 }
